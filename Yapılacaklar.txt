@@ -1,0 +1,5 @@
+1 Sonuçlar otomatik sıfırlanmıyor (Database'i ya her kullanımdan sonra sıfırlamamız lazım ya da her
+kullanımdan sonra random bir database yarattırmamız lazım (bayağı meşakkatli olur))
+2 Sonuçları Göster Butonu bozuk (Bu butonla henüz ne yapacağımı bilmiyorum)
+3 Tüm alanlar doldurulunca otomatik notepad aktarması yapılıyor. Alanlara girilen sayılara göre yaratılan
+ notepad'de bazı alanlar arası kayma oluyor (alanına göre farklı sayılarda tab atılması eklenecek)
