@@ -10,13 +10,17 @@ from tkinter import *
 import sqlite3
 import webbrowser
 import os
-    
+import random
+
 #Window Creation
 root = Tk()
 root.title('Notlandırma Programı')
 root.geometry('250x270')
 root.resizable(0,0)
 root.attributes('-topmost', True)
+
+#Random Seed for the Database
+seed = random.randint(1,999999)
 
 #Grid Configs
 Grid.columnconfigure(root,1,weight=1)
@@ -29,10 +33,10 @@ Grid.rowconfigure(root,5,weight=1)
 Grid.rowconfigure(root,6,weight=1)
 
 #Checking Whether a Database Exists
-check = os.path.exists('./database.db')
+check = os.path.exists('./'+str(seed)+'.db')
 
 #Connect to a Database
-conn = sqlite3.connect('database.db')
+conn = sqlite3.connect('./'+str(seed)+'.db')
 
 #Create Cursor
 c = conn.cursor()
@@ -65,30 +69,51 @@ ctg = ['Kaygı (8)','Obsesyon (7)','Sosyal Fobi (3)','İçedönüklük (3)','Som
 lst= []
 a= 0
 txt = 0
+b = 0
 
-#Proper Notepad Text Function (NEEDS WORK!)
+#Proper Notepad Text Function
 def bettertxt():
-    global a 
+    global a
     global cnt1
     global cnt2
     global cnt3
-    lst.append(("\n"+str(ctg[a-1])+'\t\tHiç/'+str(*cnt1[-1])+'\tBazen/'+str(*cnt2[-1])+'\tSık/'+str(*cnt3[-1])))
-
+    if ctg[a-1] == 'Somatizasyon (7)' or ctg[a-1] == 'Uyku Bozukluğu (2)' or ctg[a-1] == 'Öfke Kontrolü (8)' or ctg[a-1] == 'Psikotik Belirti(12)' or ctg[a-1] == 'İmpuls Kontrolü (5)' or ctg[a-1] == 'Disosyatif Belirti (3)':
+        lst.append(("\n"+str(ctg[a-1])+'\tHiç/'+str(*cnt1[-1])+'\tBazen/'+str(*cnt2[-1])+'\tSık/'+str(*cnt3[-1])))
+    else:
+        lst.append(("\n"+str(ctg[a-1])+'\t\tHiç/'+str(*cnt1[-1])+'\tBazen/'+str(*cnt2[-1])+'\tSık/'+str(*cnt3[-1])))    
+    
 #Submit Function
 def submit(event = None):
-    global a 
+    global a
+    global b
     global cnt1
     global cnt2
     global cnt3
     global txt
-    a += 1   
+    global seed
+    global conn
+    a += 1
+    print(a)
     if a == 19:
        a = 0
        txt = 1
-    #Database Creation & Connection
-    conn = sqlite3.connect('database.db')
+       b = 1
+# =============================================================================
+#     if b == 1:
+#         print('lol')
+#         seed = random.randint(1,999999)
+#         seed_lbl.config(text='No: '+str(seed))
+#         chck()
+#         conn = sqlite3.connect('./'+str(seed)+'.db')
+#         c = conn.cursor()
+# =============================================================================
+    conn = sqlite3.connect('./'+str(seed)+'.db')
     #Create Cursor
-    c = conn.cursor()    
+    c = conn.cursor()
+    #Database Creation & Connection
+    conn = sqlite3.connect('./'+str(seed)+'.db')
+    #Create Cursor
+    c = conn.cursor()
     #Insert Into Table
     c.execute("INSERT INTO addresses VALUES (:Kategori, :Hiç, :Bazen, :Sık)",
             {
@@ -128,8 +153,7 @@ def submit(event = None):
 #Query Function
 def query():
     #Database Creation & Connection
-    conn = sqlite3.connect('database.db')
-    #Create Cursor
+    conn = sqlite3.connect('./'+str(seed)+'.db')
     c = conn.cursor()
     #Query the Database
     c.execute("SELECT * FROM addresses")
@@ -165,6 +189,8 @@ cx=Entry(root, width=30)
 cx.grid(row=3, column=1,sticky="E")
 
 #Text Box Labels
+seed_lbl = Label(root, text='No: '+str(seed))
+seed_lbl.grid(row=0, column=0,sticky="W")
 ax_lbl = Label(root, text='Hiç')
 ax_lbl.grid(row=1, column=0,sticky="W")
 bx_lbl = Label(root, text='Bazen')
@@ -182,6 +208,7 @@ submit_btn.grid(row=4, column=0, columnspan=2, pady=10, padx=10, ipadx=100,stick
 # query_btn = Button(root, text="Sonuçları Göster", command=query)
 # query_btn.grid(row=5, column=0, columnspan=2, pady=10, padx=10, ipadx=50,sticky="NSEW")
 # =============================================================================
+
 
 #Controlling the Keyboard Flow in the Interface
 ax.focus()
