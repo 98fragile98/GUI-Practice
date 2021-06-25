@@ -42,27 +42,35 @@ conn = sqlite3.connect('./'+str(seed)+'.db')
 c = conn.cursor()
 
 #Checking Existence of and Creating the Database if Needed
-def chck():
-    if check == 'True':
-        c.execute("""CREATE TABLE addresses (
-            Kategori text,
-            Hiç integer,
-            Bazen integer, 
-            Sık integer
-            )""") 
-    else:
-        pass
-    c.execute(''' SELECT count(name) FROM sqlite_master WHERE type='table' AND name='addresses' ''')
-    if c.fetchone()[0]==1 : 
-        print('...')
-    else :
-        c.execute("""CREATE TABLE addresses (
-            Kategori text,
-            Hiç integer,
-            Bazen integer, 
-            Sık integer
-            )""") 
-chck()
+# =============================================================================
+# def chck():
+#     global conn
+#     global c
+#     if check == 'True':
+#         conn = sqlite3.connect('./'+str(seed)+'.db')
+#         c = conn.cursor()
+#         c.execute("""CREATE TABLE addresses (
+#             Kategori text,
+#             Hiç integer,
+#             Bazen integer, 
+#             Sık integer
+#             )""") 
+#     else:
+#         pass
+#     c.execute(''' SELECT count(name) FROM sqlite_master WHERE type='table' AND name='addresses' ''')
+#     if c.fetchone()[0]==1 : 
+#         print('...')
+#     else :
+#         conn = sqlite3.connect('./'+str(seed)+'.db')
+#         c = conn.cursor()
+#         c.execute("""CREATE TABLE addresses (
+#             Kategori text,
+#             Hiç integer,
+#             Bazen integer, 
+#             Sık integer
+#             )""") 
+# chck()
+# =============================================================================
 
 #Categories & Some Global Variables
 ctg = ['Kaygı (8)','Obsesyon (7)','Sosyal Fobi (3)','İçedönüklük (3)','Somatizasyon (7)','Travma (3)','Anoreksiya (3)','Bulimia (3)','Depresyon (12)','Hipomani (9)','Uyku Bozukluğu (2)','Dehb (17)','Öfke Kontrolü (8)','Sosyopati (18)','Psikotik Belirti(12)','İmpuls Kontrolü (5)','Bağımlılık (7)','Disosyatif Belirti (3)','Borderline (8)']
@@ -70,6 +78,13 @@ lst= []
 a= 0
 txt = 0
 b = 0
+
+c.execute("""CREATE TABLE addresses (
+    Kategori text,
+    Hiç integer,
+    Bazen integer, 
+    Sık integer
+    )""") 
 
 #Proper Notepad Text Function
 def bettertxt():
@@ -92,21 +107,29 @@ def submit(event = None):
     global txt
     global seed
     global conn
+    global lst
     a += 1
     print(a)
     if a == 19:
        a = 0
        txt = 1
-       b = 1
-# =============================================================================
-#     if b == 1:
-#         print('lol')
-#         seed = random.randint(1,999999)
-#         seed_lbl.config(text='No: '+str(seed))
-#         chck()
-#         conn = sqlite3.connect('./'+str(seed)+'.db')
-#         c = conn.cursor()
-# =============================================================================
+    if a == 0:
+        b = 1
+    if b == 1:
+        print('lol')
+        seed = random.randint(1,999999)
+        seed_lbl.config(text='No: '+str(seed))
+        check = os.path.exists('./'+str(seed)+'.db')
+        conn = sqlite3.connect('./'+str(seed)+'.db')         
+        c = conn.cursor()
+        c.execute("""CREATE TABLE addresses (
+             Kategori text,
+             Hiç integer,
+            Bazen integer, 
+            Sık integer
+             )""") 
+        b = 0
+
     conn = sqlite3.connect('./'+str(seed)+'.db')
     #Create Cursor
     c = conn.cursor()
@@ -137,6 +160,7 @@ def submit(event = None):
         webbrowser.open("Hasta Test Notlandırma Cıktısı.txt") 
         f.close()
         txt = 0
+        lst = []
     #Change Label when Button is Pressed
     ctg_label.config(text=ctg[a])
     #Commit Changes
@@ -223,7 +247,7 @@ submit_btn.bind('<Return>', submit)
 
 #Commit Changes
 conn.commit()
-#Close Connection
-conn.close()    
+#Close Connection  
+conn.close()
 #Main Loop
 root.mainloop()

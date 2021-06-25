@@ -1,0 +1,8 @@
+1 Sonuçlar otomatik sıfırlanmıyor (Database'i ya her kullanımdan sonra sıfırlamamız lazım ya da her
+kullanımdan sonra random bir database yarattırmamız lazım (bayağı meşakkatli olur))
+3 Tüm alanlar doldurulunca otomatik notepad aktarması yapılıyor. Alanlara girilen sayılara göre yaratılan
+ notepad'de bazı alanlar arası kayma oluyor (alanına göre farklı sayılarda tab atılması eklenecek)
+4 Database her kullanımdan sonra sıfırlanıyor (random yeni yaratılıyor), fakat ikinci kullanımda program
+database'e bağlanmıyor
+5 Liste her database değişiminde yenilenmiyor. (Liste'nin içeriğini her database yaratımında boşaltmak lazım ki
+her database yaratımında kod index dışı kalmasın)
