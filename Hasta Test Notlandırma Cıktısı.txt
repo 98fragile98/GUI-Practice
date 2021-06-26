@@ -1,0 +1,20 @@
+
+Borderline (8)		Hiç/	Bazen/	Sık/
+Kaygı (8)		Hiç/	Bazen/	Sık/
+Obsesyon (7)		Hiç/	Bazen/	Sık/
+Sosyal Fobi (3)		Hiç/	Bazen/	Sık/
+İçedönüklük (3)		Hiç/	Bazen/	Sık/
+Somatizasyon (7)	Hiç/	Bazen/	Sık/
+Travma (3)		Hiç/	Bazen/	Sık/
+Anoreksiya (3)		Hiç/	Bazen/	Sık/
+Bulimia (3)		Hiç/	Bazen/	Sık/
+Depresyon (12)		Hiç/	Bazen/	Sık/
+Hipomani (9)		Hiç/	Bazen/	Sık/
+Uyku Bozukluğu (2)	Hiç/	Bazen/	Sık/
+Dehb (17)		Hiç/	Bazen/	Sık/
+Öfke Kontrolü (8)	Hiç/	Bazen/	Sık/
+Sosyopati (18)		Hiç/	Bazen/	Sık/
+Psikotik Belirti(12)	Hiç/	Bazen/	Sık/
+İmpuls Kontrolü (5)	Hiç/	Bazen/	Sık/
+Bağımlılık (7)		Hiç/	Bazen/	Sık/
+Disosyatif Belirti (3)	Hiç/	Bazen/	Sık/

@@ -6,11 +6,13 @@ Created on Tue Jun 22 14:04:40 2021
 """
 
 #Libraries
+from matplotlib import pyplot as plt
 from tkinter import *
 import sqlite3
 import webbrowser
 import os
 import random
+import time
 
 #Window Creation
 root = Tk()
@@ -32,6 +34,11 @@ Grid.rowconfigure(root,4,weight=1)
 Grid.rowconfigure(root,5,weight=1)
 Grid.rowconfigure(root,6,weight=1)
 
+#Create Checkbox
+checkbox_status = IntVar()
+checkbox = Checkbutton(root, text="Veri Figürü Yarat", variable = checkbox_status)
+checkbox.grid(row=5, column=0, columnspan=2, pady=10, padx=10, ipadx=50,sticky="NSEW")
+
 #Checking Whether a Database Exists
 check = os.path.exists('./'+str(seed)+'.db')
 
@@ -39,7 +46,7 @@ check = os.path.exists('./'+str(seed)+'.db')
 conn = sqlite3.connect('./'+str(seed)+'.db')
 
 #Create Cursor
-c = conn.cursor()
+c = conn.cursor() 
 
 #Checking Existence of and Creating the Database if Needed (Parts of it might be needed later)
 # =============================================================================
@@ -75,9 +82,11 @@ c = conn.cursor()
 #Categories & Some Global Variables
 ctg = ['Kaygı (8)','Obsesyon (7)','Sosyal Fobi (3)','İçedönüklük (3)','Somatizasyon (7)','Travma (3)','Anoreksiya (3)','Bulimia (3)','Depresyon (12)','Hipomani (9)','Uyku Bozukluğu (2)','Dehb (17)','Öfke Kontrolü (8)','Sosyopati (18)','Psikotik Belirti(12)','İmpuls Kontrolü (5)','Bağımlılık (7)','Disosyatif Belirti (3)','Borderline (8)']
 lst= []
+figure_list = []
 a= 0
 txt = 0
 b = 0
+int_cnt = 0
 
 c.execute("""CREATE TABLE addresses (
     Kategori text,
@@ -89,13 +98,44 @@ c.execute("""CREATE TABLE addresses (
 #Proper Notepad Text Function
 def bettertxt():
     global a
+    global int_cnt
     global cnt1
     global cnt2
     global cnt3
-    if ctg[a-1] == 'Somatizasyon (7)' or ctg[a-1] == 'Uyku Bozukluğu (2)' or ctg[a-1] == 'Öfke Kontrolü (8)' or ctg[a-1] == 'Psikotik Belirti(12)' or ctg[a-1] == 'İmpuls Kontrolü (5)' or ctg[a-1] == 'Disosyatif Belirti (3)':
-        lst.append(("\n"+str(ctg[a-1])+'\tHiç/'+str(*cnt1[-1])+'\tBazen/'+str(*cnt2[-1])+'\tSık/'+str(*cnt3[-1])))
+    if ctg[int_cnt] == 'Somatizasyon (7)' or ctg[int_cnt] == 'Uyku Bozukluğu (2)' or ctg[int_cnt] == 'Öfke Kontrolü (8)' or ctg[int_cnt] == 'Psikotik Belirti(12)' or ctg[int_cnt] == 'İmpuls Kontrolü (5)' or ctg[int_cnt] == 'Disosyatif Belirti (3)':
+        lst.append(("\n"+str(ctg[int_cnt])+'\tHiç/'+str(*cnt1[-1])+'\tBazen/'+str(*cnt2[-1])+'\tSık/'+str(*cnt3[-1])))
+        figure_list.append(*cnt1[-1])
+        figure_list.append(*cnt2[-1])
+        figure_list.append(*cnt3[-1])
+        figure_list.append(ctg[int_cnt])
     else:
-        lst.append(("\n"+str(ctg[a-1])+'\t\tHiç/'+str(*cnt1[-1])+'\tBazen/'+str(*cnt2[-1])+'\tSık/'+str(*cnt3[-1])))    
+        lst.append(("\n"+str(ctg[int_cnt])+'\t\tHiç/'+str(*cnt1[-1])+'\tBazen/'+str(*cnt2[-1])+'\tSık/'+str(*cnt3[-1]))) 
+        figure_list.append(*cnt1[-1])
+        figure_list.append(*cnt2[-1])
+        figure_list.append(*cnt3[-1])
+        figure_list.append(ctg[int_cnt])
+
+#Graph Function
+def veri(yx1,yx2,yx3,lbl,fignum,placement):
+    plt.figure(fignum)
+    plt.subplot(3,3,placement)
+    x = 0
+    y1 = int(yx1)
+    y2 = int(yx2)
+    y3 = int(yx3)
+    width = 0.25
+    plt.bar(x-0.2, y1, width, color='cyan')
+    plt.bar(x, y2, width, color='orange')
+    plt.bar(x+0.2, y3, width, color='green')
+    plt.xticks([1], [''])
+    plt.xlabel("Sıklık İndikatörü")
+    plt.ylabel(str(lbl))
+    plt.legend(["Hiç", "Bazen", "Sık"])
+#Automatic Full Screen Function for Graphs (Use once after every last item of a Figure)
+def maximize():
+   figManager = plt.get_current_fig_manager()
+   figManager.window.showMaximized()  
+   
     
 #Submit Function
 def submit(event = None):
@@ -108,10 +148,12 @@ def submit(event = None):
     global seed
     global conn
     global lst
+    global int_cnt
+    global figure_list
     a += 1
     if a == 19:
-       a = 0
-       txt = 1
+        a = 0
+        txt = 1
     if a == 0:
         b = 1
     if b == 1:
@@ -150,12 +192,31 @@ def submit(event = None):
     c.execute("SELECT Sık FROM addresses")
     cnt3 = c.fetchall()
     bettertxt()
+    place_count1 = [1,2,3]
+    place_count2 = 0  
+    int_cnt += 1
+    if int_cnt == 19:
+        int_cnt = 0
+    if int_cnt == 0 and checkbox_status.get() == 1:
+        for i in range(0,36,4):
+            place_count2 += 1
+            veri(figure_list[i],figure_list[i+1],figure_list[i+2],str(figure_list[i+3]),place_count1[0],place_count2)
+        maximize()
+        place_count2 = 0
+        for i in range(36,72,4):
+            place_count2 += 1
+            veri(figure_list[i],figure_list[i+1],figure_list[i+2],str(figure_list[i+3]),place_count1[1],place_count2)
+            maximize()
+        for i in range (72,76,4):
+            veri(figure_list[i],figure_list[i+1],figure_list[i+2],str(figure_list[i+3]),place_count1[2],1)
+            maximize()
+        figure_list = []
     if txt == 1:
         f = open("Hasta Test Notlandırma Cıktısı.txt", "w",encoding="utf-8")
         for i in range(19):
             f.write(lst[i-1])
-        webbrowser.open("Hasta Test Notlandırma Cıktısı.txt") 
         f.close()
+        webbrowser.open("Hasta Test Notlandırma Cıktısı.txt") 
         txt = 0
         lst = []
     #Change Label when Button is Pressed
@@ -227,11 +288,6 @@ submit_btn= Button(root, text='Gönder', command=submit)
 submit_btn.grid(row=4, column=0, columnspan=2, pady=10, padx=10, ipadx=100,sticky="NSEW")
 
 
-#Create Checkbox
-checkbox_status = IntVar()
-checkbox = Checkbutton(root, text="Veri Figürü Yarat", variable = checkbox_status)
-checkbox.grid(row=5, column=0, columnspan=2, pady=10, padx=10, ipadx=50,sticky="NSEW")
-
 #Controlling the Keyboard Flow in the Interface
 ax.focus()
 def focus(x2,x1):
@@ -242,29 +298,6 @@ focus(ax,bx)
 focus(bx,cx)
 focus(cx,submit_btn)
 submit_btn.bind('<Return>', submit)
-
-# =============================================================================
-# #Creating Graphs
-# def veri(yx1,yx2,yx3,lbl,fignum,placement):
-#     plt.figure(fignum)
-#     plt.subplot(3,3,placement)
-#     x = 0
-#     y1 = int(yx1)
-#     y2 = int(yx2)
-#     y3 = int(yx3)
-#     width = 0.25
-#     plt.bar(x-0.2, y1, width, color='cyan')
-#     plt.bar(x, y2, width, color='orange')
-#     plt.bar(x+0.2, y3, width, color='green')
-#     plt.xticks([1], [''])
-#     plt.xlabel("Sıklık İndikatörü")
-#     plt.ylabel(str(lbl))
-#     plt.legend(["Hiç", "Bazen", "Sık"])
-# #Automatic Full Screen Function for Graphs (Use once after every last item of a Figure)
-# def maximize():
-#    figManager = plt.get_current_fig_manager()
-#    figManager.window.showMaximized()   
-# =============================================================================
 
 #Commit Changes
 conn.commit()

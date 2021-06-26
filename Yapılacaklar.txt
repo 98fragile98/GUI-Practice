@@ -1,4 +1,2 @@
-2 Sonuçları Göster Butonu bozuk (Bu butonla henüz ne yapacağımı bilmiyorum)
-	2.1 Güncel database için veri figürü çıkarma butonuna çevirilebilir
 6 Random database yaratımında yeni database adının eski database adıyla yaratılıp
 yaratılmadığını kontrol edecek bir mekanizma lazım (şuanki haliyle bunun şansı (güncel database sayısı)/999999)
