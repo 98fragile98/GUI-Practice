@@ -12,7 +12,6 @@ import sqlite3
 import webbrowser
 import os
 import random
-import time
 
 #Window Creation
 root = Tk()
@@ -39,8 +38,10 @@ checkbox_status = IntVar()
 checkbox = Checkbutton(root, text="Veri Figürü Yarat", variable = checkbox_status)
 checkbox.grid(row=5, column=0, columnspan=2, pady=10, padx=10, ipadx=50,sticky="NSEW")
 
-#Checking Whether a Database Exists
-check = os.path.exists('./'+str(seed)+'.db')
+# =============================================================================
+# #Checking Whether a Database Exists
+# check = os.path.exists('./'+str(seed)+'.db')
+# =============================================================================
 
 #Connect to a Database
 conn = sqlite3.connect('./'+str(seed)+'.db')
@@ -173,9 +174,6 @@ def submit(event = None):
             Sık integer
              )""") 
         b = 0
-    conn = sqlite3.connect('./'+str(seed)+'.db')
-    #Create Cursor
-    c = conn.cursor()
     #Database Creation & Connection
     conn = sqlite3.connect('./'+str(seed)+'.db')
     #Create Cursor
