@@ -185,7 +185,7 @@ def submit(event = None):
                 'Bazen': bx.get(),
                 'Sık':cx.get()
             })
-    #Fetch Data from Categories to Write into a Notepad
+    #Fetch Data from Adressess to Write into a Notepad
     c.execute("SELECT Hiç FROM addresses")
     cnt1 = c.fetchall()
     c.execute("SELECT Bazen FROM addresses")
@@ -193,6 +193,7 @@ def submit(event = None):
     c.execute("SELECT Sık FROM addresses")
     cnt3 = c.fetchall()
     bettertxt()
+    #Create Graphs
     place_count1 = [1,2,3]
     place_count2 = 0  
     int_cnt += 1
@@ -212,6 +213,7 @@ def submit(event = None):
             veri(figure_list[i],figure_list[i+1],figure_list[i+2],str(figure_list[i+3]),place_count1[2],1)
             maximize()
         figure_list = []
+    #Automatically Write into and Open the Created Notepad
     if txt == 1:
         f = open("Hasta Test Notlandırma Cıktısı.txt", "w",encoding="utf-8")
         for i in range(19):
@@ -220,7 +222,7 @@ def submit(event = None):
         webbrowser.open("Hasta Test Notlandırma Cıktısı.txt") 
         txt = 0
         lst = []
-    #Change Label when Button is Pressed
+    #Change Category Label when Button is Pressed
     ctg_label.config(text=ctg[a])
     #Commit Changes
     conn.commit()
@@ -248,13 +250,7 @@ def submit(event = None):
 #     for record in records:
 #             print_records += str(record) + "\n"
 #     query_label = Label(root, text=print_records)
-#     query_label.grid(row=6, column=0, columnspan=2)
-#     
-#     width1 = root.winfo_reqheight()
-#     print(width1)
-#     height1 = root.winfo_reqwidth()
-#     print(height1)
-# 
+#     query_label.grid(row=6, column=0, columnspan=2) 
 #     #Commit Changes
 #     conn.commit()
 #     #Close Connection
@@ -288,13 +284,12 @@ cx_lbl.grid(row=3, column=0,sticky="W")
 submit_btn= Button(root, text='Gönder', command=submit)
 submit_btn.grid(row=4, column=0, columnspan=2, pady=10, padx=10, ipadx=100,sticky="NSEW")
 
-
 #Controlling the Keyboard Flow in the Interface
 ax.focus()
-def focus(x2,x1):
+def focus(x1,x2):
     def go_to_next_entry(event):
-        x1.focus_set()
-    x2.bind('<Return>', go_to_next_entry)
+        x2.focus_set()
+    x1.bind('<Return>', go_to_next_entry)
 focus(ax,bx)
 focus(bx,cx)
 focus(cx,submit_btn)
