@@ -41,7 +41,7 @@ conn = sqlite3.connect('./'+str(seed)+'.db')
 #Create Cursor
 c = conn.cursor()
 
-#Checking Existence of and Creating the Database if Needed
+#Checking Existence of and Creating the Database if Needed (Parts of it might be needed later)
 # =============================================================================
 # def chck():
 #     global conn
@@ -109,14 +109,12 @@ def submit(event = None):
     global conn
     global lst
     a += 1
-    print(a)
     if a == 19:
        a = 0
        txt = 1
     if a == 0:
         b = 1
     if b == 1:
-        print('lol')
         seed = random.randint(1,999999)
         seed_lbl.config(text='No: '+str(seed))
         check = os.path.exists('./'+str(seed)+'.db')
@@ -129,7 +127,6 @@ def submit(event = None):
             Sık integer
              )""") 
         b = 0
-
     conn = sqlite3.connect('./'+str(seed)+'.db')
     #Create Cursor
     c = conn.cursor()
@@ -173,31 +170,34 @@ def submit(event = None):
     cx.delete(0,END)
     #Relocate the Focus of the Submit Button
     submit_btn.bind('<Return>', ax.focus_set())
-    
-#Query Function
-def query():
-    #Database Creation & Connection
-    conn = sqlite3.connect('./'+str(seed)+'.db')
-    c = conn.cursor()
-    #Query the Database
-    c.execute("SELECT * FROM addresses")
-    records= c.fetchall()
-    #Loop Through Results
-    print_records = ''
-    for record in records:
-            print_records += str(record) + "\n"
-    query_label = Label(root, text=print_records)
-    query_label.grid(row=6, column=0, columnspan=2)
-    
-    width1 = root.winfo_reqheight()
-    print(width1)
-    height1 = root.winfo_reqwidth()
-    print(height1)
 
-    #Commit Changes
-    conn.commit()
-    #Close Connection
-    conn.close()       
+# =============================================================================
+# #   MIGHT BE USEFUL LATER
+# #Query Function
+# def query():
+#     #Database Creation & Connection
+#     conn = sqlite3.connect('./'+str(seed)+'.db')
+#     c = conn.cursor()
+#     #Query the Database
+#     c.execute("SELECT * FROM addresses")
+#     records= c.fetchall()
+#     #Loop Through Results
+#     print_records = ''
+#     for record in records:
+#             print_records += str(record) + "\n"
+#     query_label = Label(root, text=print_records)
+#     query_label.grid(row=6, column=0, columnspan=2)
+#     
+#     width1 = root.winfo_reqheight()
+#     print(width1)
+#     height1 = root.winfo_reqwidth()
+#     print(height1)
+# 
+#     #Commit Changes
+#     conn.commit()
+#     #Close Connection
+#     conn.close()       
+# =============================================================================
 
 #Category Label
 global ctg_label
@@ -226,13 +226,11 @@ cx_lbl.grid(row=3, column=0,sticky="W")
 submit_btn= Button(root, text='Gönder', command=submit)
 submit_btn.grid(row=4, column=0, columnspan=2, pady=10, padx=10, ipadx=100,sticky="NSEW")
 
-#QUERY BUTTON IS BROKEN, NEED TO REPURPOSE IT BEFORE IMPLEMENTING THE BUTTON!
-# =============================================================================
-# #Create Query Button
-# query_btn = Button(root, text="Sonuçları Göster", command=query)
-# query_btn.grid(row=5, column=0, columnspan=2, pady=10, padx=10, ipadx=50,sticky="NSEW")
-# =============================================================================
 
+#Create Checkbox
+checkbox_status = IntVar()
+checkbox = Checkbutton(root, text="Veri Figürü Yarat", variable = checkbox_status)
+checkbox.grid(row=5, column=0, columnspan=2, pady=10, padx=10, ipadx=50,sticky="NSEW")
 
 #Controlling the Keyboard Flow in the Interface
 ax.focus()
@@ -244,6 +242,29 @@ focus(ax,bx)
 focus(bx,cx)
 focus(cx,submit_btn)
 submit_btn.bind('<Return>', submit)
+
+# =============================================================================
+# #Creating Graphs
+# def veri(yx1,yx2,yx3,lbl,fignum,placement):
+#     plt.figure(fignum)
+#     plt.subplot(3,3,placement)
+#     x = 0
+#     y1 = int(yx1)
+#     y2 = int(yx2)
+#     y3 = int(yx3)
+#     width = 0.25
+#     plt.bar(x-0.2, y1, width, color='cyan')
+#     plt.bar(x, y2, width, color='orange')
+#     plt.bar(x+0.2, y3, width, color='green')
+#     plt.xticks([1], [''])
+#     plt.xlabel("Sıklık İndikatörü")
+#     plt.ylabel(str(lbl))
+#     plt.legend(["Hiç", "Bazen", "Sık"])
+# #Automatic Full Screen Function for Graphs (Use once after every last item of a Figure)
+# def maximize():
+#    figManager = plt.get_current_fig_manager()
+#    figManager.window.showMaximized()   
+# =============================================================================
 
 #Commit Changes
 conn.commit()
