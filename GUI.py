@@ -87,6 +87,7 @@ a= 0
 txt = 0
 b = 0
 int_cnt = 0
+seed_old = 0
 
 #Create Adressess within the Current Database
 c.execute("""CREATE TABLE addresses (
@@ -151,6 +152,7 @@ def submit(event = None):
     global lst
     global int_cnt
     global figure_list
+    global seed_old
     a += 1
     if a == 19:
         a = 0
@@ -158,6 +160,7 @@ def submit(event = None):
     if a == 0:
         b = 1
     if b == 1:
+        seed_old = seed
         seed = random.randint(1,999999)
         seed_lbl.config(text='No: '+str(seed))
         check = os.path.exists('./'+str(seed)+'.db')
@@ -215,11 +218,11 @@ def submit(event = None):
         figure_list = []
     #Automatically Write into and Open the Created Notepad
     if txt == 1:
-        f = open("Hasta Test Notlandırma Cıktısı.txt", "w",encoding="utf-8")
+        f = open("Hasta Test Notlandırma Cıktısı ("+str(seed_old)+").txt" , "w",encoding="utf-8")
         for i in range(19):
             f.write(lst[i-1])
         f.close()
-        webbrowser.open("Hasta Test Notlandırma Cıktısı.txt") 
+        webbrowser.open("Hasta Test Notlandırma Cıktısı ("+str(seed_old)+").txt") 
         txt = 0
         lst = []
     #Change Category Label when Button is Pressed
@@ -283,7 +286,7 @@ cx_lbl.grid(row=3, column=0,sticky="W")
 #Create Submit Button
 submit_btn= Button(root, text='Gönder', command=submit)
 submit_btn.grid(row=4, column=0, columnspan=2, pady=10, padx=10, ipadx=100,sticky="NSEW")
-
+    
 #Controlling the Keyboard Flow in the Interface
 ax.focus()
 def focus(x1,x2):
