@@ -88,6 +88,7 @@ txt = 0
 b = 0
 int_cnt = 0
 
+#Create Adressess within the Current Database
 c.execute("""CREATE TABLE addresses (
     Kategori text,
     Hiç integer,
